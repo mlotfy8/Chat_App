@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertest/Cubit/chat_cubit.dart';
 import 'package:fluttertest/conestes.dart';
 
@@ -25,6 +30,7 @@ class _homechatState extends State<homechat> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+    SvgPicture.asset('images/m.jpg',width: 200,height: 300,);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -34,84 +40,86 @@ class _homechatState extends State<homechat> {
           centerTitle: true,
           backgroundColor: KprimaryColor,
         ),
-        body: Column(
-          children: [
-          Container(
-                  child: StreamBuilder(
-              stream: collectionReference
-                    .orderBy('now', descending: true)
-                    .snapshots(),
-              builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Expanded(
-                      child: ListView.builder(
-                        reverse: true,
-                        controller: listcontrole,
-                        itemBuilder: (context, index) => snapshot
-                                    .data!.docs[index]
-                                    .get('id') ==
-                                FirebaseAuth.instance.currentUser!.email
-                            ? ChatBuble(
-                                message:
-                                    '${snapshot.data!.docs[index].get('message')}',
-                                time: "${snapshot.data!.docs[index].get('time')}",
-                              )
-                            : ChatBubleForFriend(
-                                message:
-                                    snapshot.data!.docs[index].get('message'),
-                                time: snapshot.data!.docs[index].get('time'),
-                              ),
-                        itemCount: snapshot.data!.docs.length,
-                      ),
-                    );
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-              },
-            ),
-                ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: formstate,
-                child: TextFormField(
-                  controller: message,
-                  validator: (val) {
-                    if (val!.isEmpty == true) {
-                      return 'enter message';
-                    }
-                  },
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.blueGrey,
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          if (formstate.currentState!.validate()) {
-                            BlocProvider.of<ChatCubit>(context).addMessage(
-                                message: message.text, email: email!);
-                            message.clear();
-                            listcontrole.animateTo(0,
-                                duration: Duration(seconds: 1),
-                                curve: Curves.fastOutSlowIn);
-                          }
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          color: Colors.blue,
+        body: Container(decoration: BoxDecoration(image: DecorationImage(image: AssetImage('images/m.jpg'),alignment: Alignment.centerLeft,fit: BoxFit.values[2]),),
+        child: Column(
+            children: [
+            Container(
+                    child: StreamBuilder(
+                stream: collectionReference
+                      .orderBy('now', descending: true)
+                      .snapshots(),
+                builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: ListView.builder(
+                          reverse: true,
+                          controller: listcontrole,
+                          itemBuilder: (context, index) => snapshot
+                                      .data!.docs[index]
+                                      .get('id') ==
+                                  FirebaseAuth.instance.currentUser!.email
+                              ? ChatBuble(
+                                  message:
+                                      '${snapshot.data!.docs[index].get('message')}',
+                                  time: "${snapshot.data!.docs[index].get('time')}",
+                                )
+                              : ChatBubleForFriend(
+                                  message:
+                                      snapshot.data!.docs[index].get('message'),
+                                  time: snapshot.data!.docs[index].get('time'),
+                                ),
+                          itemCount: snapshot.data!.docs.length,
                         ),
-                      ),
-                      hintText: 'Send Message',
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueGrey),
-                          borderRadius: BorderRadius.circular(20)),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                ),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                },
               ),
-            )
-          ],
+                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: formstate,
+                  child: TextFormField(
+                    controller: message,
+                    validator: (val) {
+                      if (val!.isEmpty == true) {
+                        return 'enter message';
+                      }
+                    },
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.blueGrey,
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            if (formstate.currentState!.validate()) {
+                              BlocProvider.of<ChatCubit>(context).addMessage(
+                                  message: message.text, email: email!);
+                              message.clear();
+                              listcontrole.animateTo(0,
+                                  duration: Duration(seconds: 1),
+                                  curve: Curves.fastOutSlowIn);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        hintText: 'Send Message',
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blueGrey),
+                            borderRadius: BorderRadius.circular(20)),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                  ),
+                ),
+              )
+            ],
+          ),
         ));
   }
 

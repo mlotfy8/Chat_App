@@ -13,7 +13,7 @@ class ChatBuble extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.only(left: 16, top: 32, bottom: 32, right: 32),
+        padding: EdgeInsets.only(left: 20, top: 15, bottom: 10, right: 32),
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -21,13 +21,23 @@ class ChatBuble extends StatelessWidget {
             topRight: Radius.circular(32),
             bottomRight: Radius.circular(32),
           ),
-          color: KprimaryColor,
+          color: Colors.teal[900],
         ),
-        child: Text(
-          message,
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        child: Column(
+          children: [
+            Text(
+              message,
+              style: TextStyle(
+                color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500
+              ),
+            ),SizedBox(height: 5,),
+            Text(
+              time,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.5),fontSize: 15
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -47,7 +57,7 @@ class ChatBubleForFriend extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
-        padding: EdgeInsets.only(left: 16, top: 32, bottom: 32, right: 32),
+        padding: EdgeInsets.only(left: 20, top: 15, bottom: 10, right: 32),
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -57,11 +67,21 @@ class ChatBubleForFriend extends StatelessWidget {
           ),
           color: Color(0xff006D84),
         ),
-        child: Text(
-          message,
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        child: Column(
+          children: [
+            Text(
+              message,
+              style: TextStyle(
+                  color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500
+              ),
+            ),SizedBox(height: 5,),
+            Text(
+              time,
+              style: TextStyle(
+                  color: Colors.white.withOpacity(0.5),fontSize: 15
+              ),
+            ),
+          ],
         ),
       ),
     );
