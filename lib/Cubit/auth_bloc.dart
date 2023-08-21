@@ -30,4 +30,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
   }
+  @override
+  void onTransition(Transition<AuthEvent, AuthState> transition) {
+    print('===================$transition');
+    super.onTransition(transition);
+  }
 }
