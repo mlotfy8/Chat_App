@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertest/Cubit/auth_bloc.dart';
 import 'package:fluttertest/Cubit/chat_cubit.dart';
-import 'package:fluttertest/Cubit/login_cubit.dart';
 import 'package:fluttertest/Cubit/singin_cubit.dart';
 import 'package:fluttertest/home.dart';
 import 'package:fluttertest/homechat.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => AuthBloc()),
         BlocProvider(create: (context) => SinginCubit()),
         BlocProvider(create: (context) => ChatCubit())
 

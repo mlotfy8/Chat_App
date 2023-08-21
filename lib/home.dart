@@ -1,12 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertest/Cubit/chat_cubit.dart';
-import 'package:fluttertest/Cubit/login_cubit.dart';
 import 'package:fluttertest/singin.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'Cubit/auth_bloc.dart';
 import 'conestes.dart';
 import 'customeButton.dart';
 import 'custometextfeild.dart';
@@ -32,12 +30,11 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    return BlocConsumer<LoginCubit, LoginState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoginLoading) {
           isloding = true;
         } else if (state is LoginSuccess) {
-          BlocProvider.of<ChatCubit>(context).voidgetMessages();
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => homechat()));
           isloding = false;
@@ -52,7 +49,7 @@ class _homeState extends State<home> {
                       height: 30,
                       child: Center(
                         child: Text(
-                          '        Oops Something went wrong',
+                          '         Something Went Wrong',
                           style: TextStyle(fontSize: 16,
                               color: Colors.red, fontFamily: 'NotoSerif'),
                         ),
@@ -137,10 +134,9 @@ class _homeState extends State<home> {
                       text: 'Login',
                       tap: () async {
                         if (formstate.currentState!.validate()) {
-                          BlocProvider.of<LoginCubit>(context)
+                          BlocProvider.of<AuthBloc>(context)
                               .emit(LoginLoading());
-                          await BlocProvider.of<LoginCubit>(context)
-                              .Lodinuser(email: email.text, pass: pass.text);
+                           BlocProvider.of<AuthBloc>(context).add(LoginEvent(email: email.text,pass: pass.text));
                         }
                       }),
                   SizedBox(
