@@ -20,7 +20,6 @@ class _homechatState extends State<homechat> {
       FirebaseFirestore.instance.collection('messages');
   TextEditingController message = TextEditingController();
   GlobalKey<FormState> formstate = GlobalKey();
-  List ListMessage = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,50 +36,41 @@ class _homechatState extends State<homechat> {
         ),
         body: Column(
           children: [
-            Expanded(
-                child: StreamBuilder(
+          Container(
+                  child: StreamBuilder(
               stream: collectionReference
-                  .orderBy('now', descending: true)
-                  .snapshots(),
+                    .orderBy('now', descending: true)
+                    .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return BlocConsumer<ChatCubit, ChatState>(
-                    listener: (context, state) {
-                      if (state is ChatSuccess) {
-                        ListMessage.add(state.ListMessage);
-                      }
-                    },
-                    builder: (context, state) {
-                      return Expanded(
-                        child: ListView.builder(
-                          reverse: true,
-                          controller: listcontrole,
-                          itemBuilder: (context, index) => snapshot
-                                      .data!.docs[index]
-                                      .get('id') ==
-                                  FirebaseAuth.instance.currentUser!.email
-                              ? ChatBuble(
-                                  message:
-                                      '${snapshot.data!.docs[index].get('message')}',
-                                  time:
-                                      "${snapshot.data!.docs[index].get('time')}",
-                                )
-                              : ChatBubleForFriend(
-                                  message:
-                                      snapshot.data!.docs[index].get('message'),
-                                  time: snapshot.data!.docs[index].get('time'),
-                                ),
-                          itemCount: snapshot.data!.docs.length,
-                        ),
-                      );
-                    },
+                  if (snapshot.hasData) {
+                    return Expanded(
+                      child: ListView.builder(
+                        reverse: true,
+                        controller: listcontrole,
+                        itemBuilder: (context, index) => snapshot
+                                    .data!.docs[index]
+                                    .get('id') ==
+                                FirebaseAuth.instance.currentUser!.email
+                            ? ChatBuble(
+                                message:
+                                    '${snapshot.data!.docs[index].get('message')}',
+                                time: "${snapshot.data!.docs[index].get('time')}",
+                              )
+                            : ChatBubleForFriend(
+                                message:
+                                    snapshot.data!.docs[index].get('message'),
+                                time: snapshot.data!.docs[index].get('time'),
+                              ),
+                        itemCount: snapshot.data!.docs.length,
+                      ),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
                   );
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
               },
-            )),
+            ),
+                ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -127,6 +117,4 @@ class _homechatState extends State<homechat> {
 
   var email = FirebaseAuth.instance.currentUser!.email;
 }
-/*
 
- */
